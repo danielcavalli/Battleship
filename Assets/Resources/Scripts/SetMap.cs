@@ -1,16 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SetMap : MonoBehaviour {
+public class SetMap : MonoBehaviour 
+{
 
 	int rows = 5;
 	int columns = 5;
 	GameObject Tile;
-	GameObject Ship;
+	GameObject Ship3;
+	GameObject Ship2;
+	GameObject GhostShip;
+	GameObject Ghosts;
+	int rotation;
 	
 	float[] gridX;
 	float[] gridY;
 	int name;
+	bool Ghost = false;
 	
 	public static bool Loaded;
 	
@@ -42,7 +48,9 @@ public class SetMap : MonoBehaviour {
 	void Start () 
 	{
 		Tile = Resources.Load("Prefabs/Tile") as GameObject;
-		Ship = Resources.Load("Prefabs/Ship") as GameObject;
+		Ship3 = Resources.Load("Prefabs/Ship") as GameObject;
+		Ship2 = Resources.Load("Prefabs/Ship2") as GameObject;
+		GhostShip = Resources.Load("Prefabs/GhostShip") as GameObject;
 		SetTiles();
 	}
 	
@@ -50,18 +58,60 @@ public class SetMap : MonoBehaviour {
 	{
 		mouse = Camera.main.ScreenToWorldPoint( Input.mousePosition );
 		hit = Physics2D.Raycast( mouse, Vector2.zero );
-		if(DropPhase==0)
-		{
-			if ( hit.collider != null && hit.collider.name != "Ship" && int.Parse(hit.collider.name) <= 15 && Input.GetKeyDown(KeyCode.Mouse0))
+		if(DropPhase<2)
+		{	
+			//Ghost
+			if(!Ghost)
 			{
-				Instantiate(Ship,new Vector3(hit.collider.transform.position.x, hit.collider.transform.position.y, -1), transform.rotation);
-				DropPhase=1;
+				Ghosts = Instantiate(GhostShip,new Vector3(hit.collider.transform.position.x, hit.collider.transform.position.y, -1), transform.rotation) as GameObject;
+				Ghost = true;
 			}
-			else if(hit.collider == null || int.Parse(hit.collider.name) > 15)
+			else if(Ghost)
 			{
-				if(Input.GetKeyDown(KeyCode.Mouse0))
+				Ghosts.transform.position = new Vector3(hit.collider.transform.position.x, hit.collider.transform.position.y, -1);
+				if(Input.GetKeyDown ("r"))
 				{
-					Warnings.type = "Outside";
+					if(rotation == 0)
+					{
+						rotation = 270;
+					}
+					else if(rotation == 270)
+					{
+						rotation = 0;
+					}
+					Ghosts.transform.eulerAngles = new Vector3(0,0,rotation);
+				}
+			}
+			//Drop
+			if(DropPhase == 0)
+			{
+				if (hit.collider != null && hit.collider.name != "Ship" && int.Parse(hit.collider.name) <= 15 && Input.GetKeyDown(KeyCode.Mouse0))
+				{
+					Instantiate(Ship3,new Vector3(hit.collider.transform.position.x, hit.collider.transform.position.y, -1), Ghosts.transform.rotation);
+					DropPhase=1;
+				}
+				else if(hit.collider == null || int.Parse(hit.collider.name) > 15)
+				{
+					if(Input.GetKeyDown(KeyCode.Mouse0))
+					{
+						Warnings.type = "outside";
+					}
+				}
+			}
+			else if(DropPhase == 1)
+			{
+				if (hit.collider != null && hit.collider.name != "Ship" && int.Parse(hit.collider.name) <= 15 && Input.GetKeyDown(KeyCode.Mouse0))
+				{
+					Instantiate(Ship2,new Vector3(hit.collider.transform.position.x, hit.collider.transform.position.y, -1), Ghosts.transform.rotation);
+					DropPhase=2;
+					Destroy(Ghosts);
+				}
+				else if(hit.collider == null || int.Parse(hit.collider.name) > 15)
+				{
+					if(Input.GetKeyDown(KeyCode.Mouse0))
+					{
+						Warnings.type = "outside";
+					}
 				}
 			}
 		}

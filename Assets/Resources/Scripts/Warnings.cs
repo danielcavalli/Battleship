@@ -14,18 +14,22 @@ public class Warnings : MonoBehaviour {
 	IEnumerator Clear(float waitTime) 
 	{
 		yield return new WaitForSeconds(waitTime);
-		type = "Clear";
+		type = "clear";
 		StopCoroutine("Clear");
 	}
 	void OnGUI()
 	{
 		switch(type)
 		{
-			case "Outside":
+			case "outside":
 				GUI.Box(new Rect(0, Screen.height*0.5f, Screen.width, Screen.height*0.1f), "You can't put your ship outside the battle's area");
 				StartCoroutine("Clear", 3);
 				break;
-			case "Clear":
+			case "same_place":
+				GUI.Box(new Rect(0, Screen.height*0.5f, Screen.width, Screen.height*0.1f), "You can't put two ships in the same place, your dumbass!");
+				StartCoroutine("Clear", 3);
+				break;
+			case "clear":
 				break;
 		}
 	}
