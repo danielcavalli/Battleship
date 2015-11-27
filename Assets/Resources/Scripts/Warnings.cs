@@ -26,7 +26,7 @@ public class Warnings : MonoBehaviour {
 				StartCoroutine("Clear", 3);
 				break;
 			case "same_place":
-				GUI.Box(new Rect(0, Screen.height*0.5f, Screen.width, Screen.height*0.1f), "You can't put two ships in the same place, your dumbass!");
+				GUI.Box(new Rect(0, Screen.height*0.5f, Screen.width, Screen.height*0.1f), "You can't put two ships in the same place");
 				StartCoroutine("Clear", 3);
 				break;
 			case "clear":

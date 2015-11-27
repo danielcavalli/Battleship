@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ShipBehavior : MonoBehaviour {
-
+	public int[] points;
 	// Use this for initialization
 	void Start () {
 	
