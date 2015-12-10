@@ -12,6 +12,7 @@ public class SetMap : MonoBehaviour
 	GameObject prefabShip2;
 	GameObject prefabGhostShip;
 	GameObject Ghosts;
+	DatabaseManager dbMng;
 	int rotation;
 	
 	float[] gridX;
@@ -56,6 +57,7 @@ public class SetMap : MonoBehaviour
 		prefabShip2 = Resources.Load("Prefabs/Ship2") as GameObject;
 		prefabGhostShip = Resources.Load("Prefabs/GhostShip") as GameObject;
 		SetTiles();
+		dbMng = GameObject.Find ("GameManager").GetComponent<DatabaseManager> ();
 	}
 	
 	void Update ()	{
@@ -101,9 +103,16 @@ public class SetMap : MonoBehaviour
 					if(ship.transform.eulerAngles == new Vector3(0,0,270f)){
 						
 						ship.GetComponent<ShipBehavior>().points = new int[] {initialPos, initialPos -1,initialPos -2};
+						dbMng.ships[0] = initialPos;	
+						dbMng.ships[1] = initialPos - 1;
+						dbMng.ships[2] = initialPos - 2;
 					}
 					else{
 						ship.GetComponent<ShipBehavior>().points = new int[] {initialPos,initialPos + 5,initialPos +10};
+						
+						dbMng.ships[0] = initialPos;	
+						dbMng.ships[1] = initialPos + 5;
+						dbMng.ships[2] = initialPos + 10;
 					}
 					DropPhase=1;
 					Destroy(Ghosts);
@@ -125,10 +134,15 @@ public class SetMap : MonoBehaviour
 					GameObject ship =  Instantiate(prefabShip2,new Vector3(hit.collider.transform.position.x, hit.collider.transform.position.y, -1), Ghosts.transform.rotation) as GameObject;
 					if(ship.transform.eulerAngles == new Vector3(0,0,270f)){
 						ship.GetComponent<ShipBehavior>().points = new int[] {initialPos, initialPos -1};
+						dbMng.ships[3] = initialPos;	
+						dbMng.ships[4] = initialPos - 1;
 					}
 					else{
 						ship.GetComponent<ShipBehavior>().points = new int[] {initialPos,initialPos + 5};
+						dbMng.ships[3] = initialPos;	
+						dbMng.ships[4] = initialPos + 5;
 					}
+				}
 					DropPhase=2;
 					Destroy(Ghosts);
 					Ghosts = null;
@@ -139,7 +153,7 @@ public class SetMap : MonoBehaviour
 					}
 				}
 			}
-		}
+		
 
 		bool checkShipCollision(int[] coordinates){
 		ShipBehavior[] sb = FindObjectsOfType<ShipBehavior> ();
