@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CameraControl : MonoBehaviour {
 
 	private Transform center;
 	private bool moved = false;
-
 	void Start (){
 	}
 	
@@ -17,5 +17,5 @@ public class CameraControl : MonoBehaviour {
 //				moved = true;
 //			}
 //		}
-}
+	}
 }

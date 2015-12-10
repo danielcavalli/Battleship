@@ -31,6 +31,10 @@ public class Warnings : MonoBehaviour {
 				break;
 			case "clear":
 				break;
+			case "attacked":
+				GUI.Box(new Rect(0, Screen.height*0.5f, Screen.width, Screen.height*0.1f), "You already attacked three times, finish your turn");
+				StartCoroutine("Clear", 3);
+				break;
 		}
 	}
 }

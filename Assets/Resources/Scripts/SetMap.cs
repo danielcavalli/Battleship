@@ -24,7 +24,7 @@ public class SetMap : MonoBehaviour
 	public float enemyOffSetY;
 	public static bool Loaded;
 	
-	private int DropPhase = 0;
+	public int DropPhase = 0;
 	Vector2 mouse;
 	RaycastHit2D hit;
 
@@ -39,6 +39,8 @@ public class SetMap : MonoBehaviour
 				GameObject Tiles = Instantiate(Tile,new Vector3(playerOffSetX - gridX[j], playerOffSetY - gridY[i], 0), transform.rotation) as GameObject;
 				GameObject eTiles = Instantiate(TileEnemy,new Vector3(playerOffSetX - gridX[j] + (1.6f * columns), playerOffSetY - gridY[i], 0), transform.rotation) as GameObject;
 				Tiles.name = "" + name;
+				eTiles.name = "Enemy" + name;
+				eTiles.AddComponent<TileEnemySelect>();
 				if(name == 25)
 				{
 					Loaded = true;
@@ -87,7 +89,8 @@ public class SetMap : MonoBehaviour
 			}
 			//Drop
 		int initialPos = 0;
-		try{initialPos = int.Parse(hit.collider.name);
+		try{
+			initialPos = int.Parse(hit.collider.name);
 //			Debug.Log((checkShipCollision(new int[] {initialPos,initialPos + 5,initialPos +10}) && Ghosts.transform.eulerAngles == Vector3.zero) ||
 //			          (checkShipCollision(new int[] {initialPos, initialPos -1,initialPos -2})&& Ghosts.transform.eulerAngles == new Vector3(0,0,270f)));
 		}catch{}
@@ -121,10 +124,10 @@ public class SetMap : MonoBehaviour
 			    (checkShipCollision(new int[] {initialPos, initialPos -1})&& Ghosts.transform.eulerAngles == new Vector3(0,0,270f))) ){
 					GameObject ship =  Instantiate(prefabShip2,new Vector3(hit.collider.transform.position.x, hit.collider.transform.position.y, -1), Ghosts.transform.rotation) as GameObject;
 					if(ship.transform.eulerAngles == new Vector3(0,0,270f)){
-						ship.GetComponent<ShipBehavior>().points = new int[] {initialPos, initialPos -1,initialPos -2};
+						ship.GetComponent<ShipBehavior>().points = new int[] {initialPos, initialPos -1};
 					}
 					else{
-						ship.GetComponent<ShipBehavior>().points = new int[] {initialPos,initialPos + 5,initialPos +10};
+						ship.GetComponent<ShipBehavior>().points = new int[] {initialPos,initialPos + 5};
 					}
 					DropPhase=2;
 					Destroy(Ghosts);
